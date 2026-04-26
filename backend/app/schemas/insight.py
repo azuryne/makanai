@@ -5,7 +5,7 @@ Uses by:
     GET /api/insights/weekly
 """
 
-from  pydantic import BaseModel
+from pydantic import BaseModel
 from datetime import date
 from typing import Optional
 
