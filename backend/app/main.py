@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from app.config import settings
 from app.db.session import engine, Base 
-from app.api.routes import auth , meals, insights
+from app.api.routes import auth , meals, insights, chat
 import logging
 
 # Setup logging 
@@ -60,7 +60,7 @@ app.add_middleware(
 app.include_router(auth.router, prefix="/auth", tags=["Auth"])
 app.include_router(meals.router, prefix="/api/meals", tags=["Meals"])
 app.include_router(insights.router, prefix="/api/insights", tags=["Insights"])
-# app.include_router(chat.router, prefix="/chat", tags=["Chat"])
+app.include_router(chat.router, prefix="/api/chat", tags=["Chat"])
 
 # Health Check 
 @app.get("/health", tags=["Health"])

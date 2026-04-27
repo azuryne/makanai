@@ -71,13 +71,11 @@ CHAT_SYSTEM_PROMPT = """You are MAKANAI, a friendly and knowledgable nutriotion 
                         question about their eating habits, nutrition and provide healthy eating 
                         advice. Be conversational, encouraging and helpful.
                         Keep responses concise and easy to understand.
+                        If you don't know something, say so honestly.
                     """
 
-CHAT_HUMAN_PROMPT = """User's meal history: 
+CHAT_HUMAN_PROMPT = """User's meal history and context: 
                     {meal_context}
-
-                    Conversation history:
-                    {chat_history}
 
                     User's message: 
                     {message}

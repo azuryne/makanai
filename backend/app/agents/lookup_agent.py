@@ -18,7 +18,7 @@ async def lookup_nutrition(foods: list[str]) -> dict:
     }
 
     for food in foods:
-        result = await _lookup_single_food(food)
+        result = await _lookup_single_food(food_name=food)
         if result:
             total["calories"] += result["calories"]
             total["protein"] += result["protein"]
@@ -59,7 +59,7 @@ async def _llm_estimate(food_name: str) -> dict | None:
     Input: food name extracted by parser agent
     Output: Nutritional info by LLM 
     """
-    prompt = LOOKUP_HUMAN_PROMPT.format(food_name)
+    prompt = LOOKUP_HUMAN_PROMPT.format(food_name=food_name)
 
     try:
         import json, re 
