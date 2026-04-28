@@ -50,5 +50,40 @@ async def generate_chat_response(
             "Sorry, I am having trouble responding right now"
             "Please ensure that Ollama is running"
         )
+    
+async def stream_chat_response(
+        message: str,
+        context: str
+): 
+    """
+    Stream chat response tokens from Ollama one by one
+
+    Used by streaming POST /api/chat/stream endpoint
+    Yields tokens as they arrive for a typing effect. 
+
+    Args:
+        message: the user's current message
+        context: formatted string with meal + chat history
+
+    Yields:
+        individual token strings as they arrive 
+    """
+
+    prompt = CHAT_HUMAN_PROMPT.format(
+        meal_context=context,
+        chat_history="",
+        message=message
+    )
+
+    try:
+        async for token in ollama_service.stream(
+            prompt=prompt,
+            system=CHAT_SYSTEM_PROMPT
+        ):
+            yield token
+
+    except Exception as e:
+        print(f"Chat stream agent error: {e}")
+        yield "Sorry, I am having trouble responding right now"
 
 
