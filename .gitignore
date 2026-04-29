@@ -12,3 +12,4 @@ dist/
 # General
 .DS_Store
 *.log
+/misc

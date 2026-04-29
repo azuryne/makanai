@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Nunito:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream:  #F7EED8; --cream2: #EDE1C5; --cream3: #FBF5E8;
+  --ink:    #2A1608; --ink-mid: #6B4226; --ink-lt: #A0714A;
+  --terra:  #C24B34; --terra-lt: #E8856A;
+  --gold:   #C49030; --gold-lt: #E8D090;
+  --sage:   #5E8C5E; --sage-lt: #A8CCA8;
+  --border: 1.5px solid #C0A060;
+  --shadow: 3px 3px 0 #C0A060;
+  --shadow-sm: 2px 2px 0 #C0A060;
+}
+
+html, body, #root { height: 100%; }
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+}
+input, textarea, button, select { font-family: 'Nunito', sans-serif; }
+
+/* animations */
+@keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:none; } }
+@keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
+.fadeUp { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+
+/* reusable utilities */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  border: var(--border); border-radius: 8px; cursor: pointer;
+  font-weight: 700; font-size: 14px; padding: 10px 20px;
+  transition: transform 0.12s, box-shadow 0.12s, background 0.15s;
+  box-shadow: var(--shadow-sm);
+}
+.btn:hover:not(:disabled) { transform: translate(-1px,-1px); }
+.btn:active:not(:disabled) { transform: translate(1px,1px); box-shadow: 1px 1px 0 #C0A060; }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn-primary {
+  background: var(--terra); color: #FBF5E8;
+  border-color: var(--ink); box-shadow: 3px 3px 0 var(--ink);
+}
+
+.input-field {
+  width: 100%; padding: 11px 14px; border: var(--border); border-radius: 8px;
+  background: var(--cream3); color: var(--ink); font-size: 14px; font-weight: 600;
+  box-shadow: var(--shadow-sm); outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input-field:focus { border-color: var(--gold); box-shadow: 3px 3px 0 var(--gold); }
+
+.card {
+  background: var(--cream3); border: var(--border);
+  border-radius: 12px; box-shadow: var(--shadow);
+}
