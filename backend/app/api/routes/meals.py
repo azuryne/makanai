@@ -64,7 +64,7 @@ async def get_meal_history(
         .limit(limit)
         .offset(offset)
     )
-    meals = result.scalar().all()
+    meals = result.scalars().all()
     return MealHistoryResponse(
         meals=[
             MealLogResponse(

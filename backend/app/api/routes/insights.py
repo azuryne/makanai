@@ -10,7 +10,7 @@ Requires JWT authentication on all routes
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession 
 from sqlalchemy import select 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from app.db.session import get_db
 from app.api.deps import get_current_user
 from app.models.user import User
@@ -42,7 +42,7 @@ async def get_weekly_insight(
     """
 
     # Calculate date range - last 7 days 
-    week_end = datetime.utcnow()
+    week_end = datetime.now(timezone.utc)
     week_start = week_end - timedelta(days=7)
 
     # Fetch meals from the last 7 days 
@@ -62,7 +62,7 @@ async def get_weekly_insight(
             "parsed_foods" : meal.parsed_foods or [],
             "nutrition" : meal.nutrition or {},
             "meal_time" : meal.meal_time,
-            "logged_at" : meal.logged_at.isoformat() if meal.logged_at else None
+            "logged_at" : meal.logged_at,
         } for meal in meals
     ]
 

@@ -21,12 +21,12 @@ class MealLogResponse(BaseModel):
     raw_text: str
     parsed_food: list[str]
     nutrition: NutritionData
-    meal_time: Optional[str]
+    meal_time: Optional[str] = None
     logged_at: datetime
 
     class Config: 
         from_attributes = True
 
 class MealHistoryResponse(BaseModel):
-    meal_id: list[MealLogRequest]
+    meals: list[MealLogResponse]
     total: int

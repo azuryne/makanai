@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { api } from './api/client';
 import AuthScreen from './screens/AuthScreen';
 import Spinner from './components/Spinner';
+import AppShell from './screens/AppShell';
 
 export default function App() {
   const [token, setToken] = useState(() => localStorage.getItem('makanai_token') || '');
@@ -54,17 +55,7 @@ export default function App() {
   }
 
   // Logged in — placeholder home for now. We'll build AppShell next session.
-  return (
-    <div style={{ padding:40, textAlign:'center' }}>
-      <h1 style={{ fontFamily:'Lora', fontStyle:'italic' }}>
-        Welcome, {user.full_name || user.email} 🥥
-      </h1>
-      <p style={{ marginTop:12, color:'var(--ink-lt)' }}>
-        Auth works! Sidebar + meal logging coming next session.
-      </p>
-      <button className="btn" onClick={onLogout} style={{ marginTop:20 }}>
-        Sign out
-      </button>
-    </div>
-  );
+  return <AppShell token={token} user={user} onLogout={onLogout} />;
+  
+  ;
 }

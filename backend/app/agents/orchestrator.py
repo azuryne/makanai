@@ -81,7 +81,7 @@ async def orchestrate_weekly_insights(
     print(f"Orchestrator: generating weekly insights for user {user_id}")
 
     # Import here to avoid circular import 
-    from app.agents.insight_agent import generate_weekly_insight
+    from app.agents.insight_agent import generate_weekly_insights
 
     # Guard - no meals logged this week 
     if not meals:
@@ -106,11 +106,10 @@ async def orchestrate_weekly_insights(
         }
 
     # Run insight agent
-    insight = await generate_weekly_insight(meals)
+    insight = await generate_weekly_insights(meals)
     print(f"Weekly insight generated for {len(meals)} meals")
 
     return insight
-
 
 # TODO: orchestrator for chatbot
 

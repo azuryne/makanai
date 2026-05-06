@@ -22,7 +22,7 @@ from app.constant import INSIGHT_SYSTEM_PROMPT, INSIGHT_HUMAN_PROMPT
 
 logger = logging.getLogger(__name__)
 
-async def generate_weekly_insight(meals: list[dict]) -> dict:
+async def generate_weekly_insights(meals: list[dict]) -> dict:
     """
     Generate a weekly insight summary from meal history.
 
@@ -76,11 +76,11 @@ async def generate_weekly_insight(meals: list[dict]) -> dict:
         }
     
     except json.JSONDecodeError:
-        print(f"Insight agent JSON error, raw response: {response}")
+        logger.error(f"Insight agent JSON error, raw response: {response}")
         return _fallback_insight(averages, len(meals))
     
     except Exception as e:
-        print(f"Insight agent error: {e}")
+        logger.error(f"Insight agent error: {e}")
         return _fallback_insight(averages, len(meals))
     
 def _calculate_averages(meals: list[dict]) -> dict:
@@ -111,7 +111,10 @@ def _calculate_averages(meals: list[dict]) -> dict:
         "fiber": 0.0
     }
 
-    valid_meals = 0
+    # track distinct dates 
+    logged_dates = set()
+
+    # valid_meals = 0
     for meal in meals: 
         nutrition  = meal.get("nutrition", {})
         if nutrition:
@@ -120,14 +123,18 @@ def _calculate_averages(meals: list[dict]) -> dict:
             total["carbs"] += float(nutrition.get("carbs", 0))
             total["fat"] += float(nutrition.get("fat", 0))
             total["fiber"] += float(nutrition.get("fiber", 0))
-            valid_meals += 1
 
-    if valid_meals == 0:
-        return total
-    
-    # Average over 7 days not just meal count 
+            # extract just the date portion (YYYY-MM-DD)
+            logged_at = meal.get("logged_at")
+            if logged_at:
+                # logged_at is a datetime -grab .date()
+                logged_dates.add(logged_at.date() if hasattr(logged_at, 'date') else str(logged_at)[:10])
+        
+    # Divide by actual logged days, but cap at 7 days (a week)
+    # and floor at 1 to avoid divide-by-zero 
 
-    days = 7
+    days = max(1, min(len(logged_dates), 7))
+
     return {
         "calories" : round(total["calories"] / days, 2),
         "protein" : round(total["protein"] / days, 2),
@@ -184,7 +191,7 @@ def _fallback_insight(averages: dict, total_meals: int) -> dict:
 
     return { 
         "summary" : (
-            f"You logged {total_meals} meals this week",
+            f"You logged {total_meals} meals this week"
             f"Your average daily intake was "
             f"{averages['calories']} calories, "
             f"{averages['protein']}g protein, "
