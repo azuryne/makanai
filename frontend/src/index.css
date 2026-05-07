@@ -25,6 +25,10 @@ input, textarea, button, select { font-family: 'Nunito', sans-serif; }
 @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:none; } }
 @keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
 .fadeUp { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.4; transform: scale(0.85); }
+}
 
 /* reusable utilities */
 .btn {

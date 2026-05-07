@@ -66,8 +66,8 @@ def _build_meal_context(meals: list[dict]) -> str:
 
     for meal in meals:
         foods = meal.get("parsed_foods", [])
-        meal_time = meal.get("meal_time", "unspecified")
-        nutrition = meal.get("nutrition", [])
+        meal_time = meal.get("meal_time") or "unspecified"
+        nutrition = meal.get("nutrition", {})
         calories = round(float(nutrition.get("calories", 0)))
         protein = round(float(nutrition.get("protein", 0)))
         carbs = round(float(nutrition.get("carbs", 0)))
@@ -77,7 +77,7 @@ def _build_meal_context(meals: list[dict]) -> str:
         food_str = ", ".join(foods) if foods else "unknown"
 
         lines.append(
-            f"= {meal_time.capitalize()}: {food_str}"
+            f"= {meal_time.capitalize()}: {food_str} "
             f"| {calories} kcal, {protein}g protein, "
             f"{carbs}g carbs, {fat}g fat"
             f"{' (' + logged_at[:10] + ')' if logged_at else ''}"

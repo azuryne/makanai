@@ -109,10 +109,18 @@ async def chat(
     Returns:
         ChatResponse with reply and context_used count
     """
-
     meal_history, chat_history = await _get_context(current_user, db)
 
-    # Run orchestrator 
+    # Step 1 — save the user message FIRST and commit
+    db.add(ChatMessage(
+        user_id=current_user.id,
+        role="user",
+        message=request.message,
+        context={}
+    ))
+    await db.commit()
+
+    # Step 2 — run orchestrator (this can take 20-30s)
     result = await orchestrate_chat(
         user_id=str(current_user.id),
         message=request.message,
@@ -120,22 +128,13 @@ async def chat(
         chat_history=chat_history
     )
 
-    # Save user message to DB 
-    db.add(ChatMessage(
-        user_id=current_user.id,
-        role="user",
-        message=request.message,
-        context={}
-    ))
-
-    # Save assistant response to DB 
+    # Step 3 — save assistant reply with its own (later) timestamp
     db.add(ChatMessage(
         user_id=current_user.id,
         role="assistant",
-    
         message=result["reply"],
-        context={"meal_used": result['context_used']}))
-
+        context={"meals_used": result["context_used"]}
+    ))
     await db.commit()
 
     return ChatResponse(

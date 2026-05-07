@@ -4,6 +4,7 @@ import { useState } from 'react';
 import LogScreen from '../components/LogScreen';
 import InsightsScreen from './InsightsScreen';
 import HistoryScreen from './HistoryScreen';
+import ChatScreen from './ChatScreen';
 
 const NAV_ITEMS = [
   { id: 'log',      label: 'Log Meal', icon: '🍛' },
@@ -150,7 +151,7 @@ export default function AppShell({ token, user, onLogout }) {
       }}>  {/* Appshell receives token from App.jsx then hands down to LogScreen so it can call the API */}
         {tab === 'log'      && <LogScreen token={token} />}   
         {tab === 'history'  && <HistoryScreen token={token} />}
-        {tab === 'chat'     && <ComingSoon name="AI Chat"  icon="💬" />}
+        {tab === 'chat' && <ChatScreen token={token} />}
         {tab === 'insights' && <InsightsScreen token={token} />}
       </div>
     </div>
